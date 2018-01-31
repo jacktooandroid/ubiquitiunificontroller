@@ -89,14 +89,14 @@ echo 'deb http://www.ubnt.com/downloads/unifi/debian stable ubiquiti' | sudo tee
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ubnt.com/unifi/unifi-repo.gpg
 sudo apt-get update && sudo apt-get dist-upgrade -y && sudo apt-get install unifi haveged fail2ban glances traceroute speedtest-cli iperf3 lynx -y
 
-#Configure Ubiquiti UniFi Controller Java memory (heap size) allocation
+#Configure Ubiquiti UniFi Controller Java Memory (heap size) Allocation
 clear
 echo Step 3: Advanced settings
 echo 'Default Ubiquiti UniFi Controller Java memory allocation (heap size)'
 echo Maximum memory allocation: 1024 MB
 echo 'Default settings is suitable for almost all use cases, modify ONLY IF NEEDED (large installs, etc.)!'
 echo Reboot may be required after modifications!
-echo -n 'Do you want to modify the memory allocation for Ubiquiti UniFi Controller? (Y/n) '
+echo -n 'Do you want to modify the memory allocation for Ubiquiti UniFi Controller? [Y/n] '
 read modifymemoryallocationdecision
 
 if [[ $modifymemoryallocationdecision =~ (Y|y) ]]
