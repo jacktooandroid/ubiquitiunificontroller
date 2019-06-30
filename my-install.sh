@@ -141,6 +141,7 @@ else
     echo unifi.xmx=1024 | sudo tee -a /usr/lib/unifi/data/system.properties
 fi
 
+sudo service unifi restart
 echo 'Your Ubiquiti UniFi Controller has been installed & modified to your preference (if any)!'
 echo 'Share this with others if this script has helped you!'
 echo '#UbiquitiEverywhere'

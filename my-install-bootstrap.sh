@@ -67,3 +67,6 @@ if [[ $memtotal -gt 900000 ]]
         echo unifi.xms=256 | sudo tee -a /usr/lib/unifi/data/system.properties
         echo unifi.xmx=1024 | sudo tee -a /usr/lib/unifi/data/system.properties
 fi
+
+sudo service unifi restart
+exit
