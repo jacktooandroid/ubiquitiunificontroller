@@ -90,7 +90,7 @@ sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi
 sudo apt-get update && sudo apt-get dist-upgrade -y && sudo apt-get install unifi haveged -y
 sudo apt-get install default-jre-headless -y
 sudo service unifi restart
-sleep 3
+sleep 5
 
 #Configure Ubiquiti UniFi Controller Java Memory (heap size) Allocation
 clear
