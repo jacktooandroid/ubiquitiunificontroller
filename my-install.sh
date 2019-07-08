@@ -144,6 +144,9 @@ fi
 #Redirect port 443 to 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
 
+#Installing iptables-persistent
+sudo apt-get install iptables-persistent -y
+
 sudo service unifi restart
 
 echo 'Your Ubiquiti UniFi Controller has been installed & modified to your preference (if any)!'
