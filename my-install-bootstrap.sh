@@ -68,6 +68,9 @@ if [[ $memtotal -gt 900000 ]]
         echo unifi.xmx=1024 | sudo tee -a /usr/lib/unifi/data/system.properties
 fi
 
+#Custom SSL Configuration
+echo unifi.https.sslEnabledProtocols=TLSv1.2 | sudo tee -a /usr/lib/unifi/data/system.properties
+
 #Redirect port 443 to 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
 
