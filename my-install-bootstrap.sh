@@ -70,6 +70,7 @@ fi
 
 #Custom SSL Configuration
 echo unifi.https.sslEnabledProtocols=TLSv1.2 | sudo tee -a /usr/lib/unifi/data/system.properties
+echo unifi.https.ciphers=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 | sudo tee -a /usr/lib/unifi/data/system.properties
 
 #Redirect port 443 to 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
