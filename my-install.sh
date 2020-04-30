@@ -150,6 +150,7 @@ echo unifi.G1GC.enabled=true | sudo tee -a /usr/lib/unifi/data/system.properties
 
 #Redirect port 443 to 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
+sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 
 #Installing iptables-persistent
 sudo apt-get install iptables-persistent -y
