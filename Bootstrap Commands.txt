@@ -1,7 +1,6 @@
 #!/bin/bash
 
 cd /tmp
-sudo apt-get update
-sudo apt-get install curl -y
 curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/my-install-bootstrap.sh -o my-install-bootstrap.sh
+wget https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/my-install-bootstrap.sh -O my-install-bootstrap.sh
 sudo bash my-install-bootstrap.sh
