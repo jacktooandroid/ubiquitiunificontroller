@@ -87,7 +87,7 @@ clear
 echo Step 2: Installing Ubiquiti UniFi Controller...
 echo 'deb https://www.ubnt.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ubnt.com/unifi/unifi-repo.gpg
-sudo apt-get update && sudo apt-get dist-upgrade -y && sudo apt-get install unifi haveged fail2ban glances traceroute speedtest-cli iperf3 lynx -y
+sudo apt-get update && sudo apt-get dist-upgrade -y && sudo apt-get install unifi haveged fail2ban glances traceroute iperf3 lynx -y
 #sudo apt-get install default-jre-headless -y
 #sudo service unifi restart
 #sleep 10
@@ -156,6 +156,15 @@ sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 sudo apt-get install iptables-persistent -y
 
 sudo service unifi restart
+
+#Installing Speedtest by Ookla CLI
+sudo apt-get install gnupg1 apt-transport-https dirmngr -y
+export INSTALL_KEY=379CE192D401AB61
+export DEB_DISTRO=$(lsb_release -sc)
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $INSTALL_KEY
+echo "deb https://ookla.bintray.com/debian ${DEB_DISTRO} main" | sudo tee  /etc/apt/sources.list.d/speedtestbyookla-cli.list
+sudo apt-get update
+sudo apt-get install speedtest -y
 
 echo 'Your Ubiquiti UniFi Controller has been installed & modified to your preference (if any)!'
 echo 'Share this with others if this script has helped you!'
