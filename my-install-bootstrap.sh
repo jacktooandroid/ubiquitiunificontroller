@@ -95,4 +95,7 @@ echo "deb https://ookla.bintray.com/debian ${DEB_DISTRO} main" | sudo tee  /etc/
 sudo apt-get update
 sudo apt-get install speedtest -y
 
+#Update Glances
+pip3 install --upgrade glances
+
 exit
