@@ -95,6 +95,10 @@ echo "deb https://ookla.bintray.com/debian ${DEB_DISTRO} main" | sudo tee  /etc/
 sudo apt-get update
 sudo apt-get install speedtest -y
 
+#Downloading Cloudflare DDNS Script
+wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified.sh -O /home/cloudflare_ddns_modified.sh
+curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified.sh -o /home/cloudflare_ddns_modified.sh
+
 #Update Glances
 pip3 install --upgrade glances
 
