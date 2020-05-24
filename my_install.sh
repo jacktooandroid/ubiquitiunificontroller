@@ -167,8 +167,8 @@ sudo apt-get update
 sudo apt-get install speedtest -y
 
 #Downloading Cloudflare DDNS Script
-sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified.sh -O /home/cloudflare_ddns_modified-uuc.sh
-sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified.sh -o /home/cloudflare_ddns_modified-uuc.sh
+sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -O /home/cloudflare_ddns_modified-uuc.sh
+sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -o /home/cloudflare_ddns_modified-uuc.sh
 
 #Update Glances
 pip3 install --upgrade glances
