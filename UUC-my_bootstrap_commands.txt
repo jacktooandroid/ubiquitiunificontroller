@@ -1,0 +1,5 @@
+#!/bin/bash
+
+wget https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/my_install_bootstrap.sh -O /tmp/my_install_bootstrap.sh
+curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/my_install_bootstrap.sh -o /tmp/my_install_bootstrap.sh
+sudo bash /tmp/my_install_bootstrap.sh
