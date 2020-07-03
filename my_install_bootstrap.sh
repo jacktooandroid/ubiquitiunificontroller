@@ -46,7 +46,7 @@ fi
 #Installing Ubiquiti UniFi Controller and Default JRE
 echo 'deb https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
 wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
-sudo apt-get update && sudo apt-get install unifi haveged fail2ban traceroute glances python3-pip iperf3 lynx -y
+sudo apt-get update && sudo apt-get install unifi haveged fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc -y
 #sudo apt-get install default-jre-headless -y
 #sudo service unifi restart
 #sleep 10
@@ -98,6 +98,15 @@ sudo apt-get install speedtest -y
 #Downloading Cloudflare DDNS Script
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -O /home/cloudflare_ddns_modified-uuc.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -o /home/cloudflare_ddns_modified-uuc.sh
+
+#MiniUPNP Settings
+echo "sudo upnpc -r 3478 udp" | sudo tee -a /home/miniupnp-uuc.sh
+echo "sudo upnpc -r 6789 tcp" | sudo tee -a /home/miniupnp-uuc.sh
+echo "sudo upnpc -r 8080 tcp" | sudo tee -a /home/miniupnp-uuc.sh
+echo "sudo upnpc -r 8443 tcp" | sudo tee -a /home/miniupnp-uuc.sh
+echo "sudo upnpc -r 8880 tcp" | sudo tee -a /home/miniupnp-uuc.sh
+echo "sudo upnpc -r 8843 tcp" | sudo tee -a /home/miniupnp-uuc.sh
+sudo bash /home/miniupnp-uuc.sh
 
 #Update Glances
 pip3 install --upgrade glances
