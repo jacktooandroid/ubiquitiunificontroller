@@ -171,13 +171,13 @@ sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/clo
 sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -o /home/cloudflare_ddns_modified-uuc.sh
 
 #MiniUPNP Settings
-echo "sudo upnpc -r 3478 udp" | sudo tee -a /home/miniupnp-uuc.sh
-echo "sudo upnpc -r 6789 tcp" | sudo tee -a /home/miniupnp-uuc.sh
-echo "sudo upnpc -r 8080 tcp" | sudo tee -a /home/miniupnp-uuc.sh
-echo "sudo upnpc -r 8443 tcp" | sudo tee -a /home/miniupnp-uuc.sh
-echo "sudo upnpc -r 8880 tcp" | sudo tee -a /home/miniupnp-uuc.sh
-echo "sudo upnpc -r 8843 tcp" | sudo tee -a /home/miniupnp-uuc.sh
-sudo bash /home/miniupnp-uuc.sh
+echo "sudo upnpc -r 3478 udp" | sudo tee -a /home/miniupnp.sh
+echo "sudo upnpc -r 6789 tcp" | sudo tee -a /home/miniupnp.sh
+echo "sudo upnpc -r 8080 tcp" | sudo tee -a /home/miniupnp.sh
+echo "sudo upnpc -r 8443 tcp" | sudo tee -a /home/miniupnp.sh
+echo "sudo upnpc -r 8880 tcp" | sudo tee -a /home/miniupnp.sh
+echo "sudo upnpc -r 8843 tcp" | sudo tee -a /home/miniupnp.sh
+sudo bash /home/miniupnp.sh
 
 #Update Glances
 pip3 install --upgrade glances
