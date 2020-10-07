@@ -47,6 +47,7 @@ fi
 echo 'deb https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
 wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 sudo apt-get update && sudo apt-get install unifi haveged fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc -y
+sudo pip3 install --upgrade glances
 #sudo apt-get install default-jre-headless -y
 #sudo service unifi restart
 #sleep 10
@@ -107,8 +108,5 @@ echo "sudo upnpc -r 8443 tcp" | sudo tee -a /home/miniupnp.sh
 echo "sudo upnpc -r 8880 tcp" | sudo tee -a /home/miniupnp.sh
 echo "sudo upnpc -r 8843 tcp" | sudo tee -a /home/miniupnp.sh
 sudo bash /home/miniupnp.sh
-
-#Update Glances
-pip3 install --upgrade glances
 
 exit
