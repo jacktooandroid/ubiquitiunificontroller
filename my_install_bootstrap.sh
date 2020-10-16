@@ -44,6 +44,7 @@ if [[ $totalmem -lt 900000 ]]
 fi
 
 #Installing Ubiquiti UniFi Controller and Default JRE
+sudo apt-get install gnupg1 apt-transport-https dirmngr -y
 echo 'deb https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
 wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 sudo apt-get update && sudo apt-get install unifi haveged fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc -y
@@ -88,7 +89,6 @@ sudo apt-get install iptables-persistent -y
 sudo service unifi restart
 
 #Installing Speedtest by Ookla CLI
-sudo apt-get install gnupg1 apt-transport-https dirmngr -y
 export INSTALL_KEY=379CE192D401AB61
 export DEB_DISTRO=$(lsb_release -sc)
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $INSTALL_KEY

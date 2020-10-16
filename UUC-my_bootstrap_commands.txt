@@ -1,5 +1,9 @@
 #!/bin/bash
 
+sudo apt-get update && sudo apt-get install curl wget -y
 wget https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/my_install_bootstrap.sh -O /tmp/my_install_bootstrap.sh
 curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/my_install_bootstrap.sh -o /tmp/my_install_bootstrap.sh
 sudo bash /tmp/my_install_bootstrap.sh
+
+#crontab command
+*/15 * * * *  sudo bash /home/miniupnp.sh
