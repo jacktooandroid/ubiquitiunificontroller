@@ -6,4 +6,5 @@ curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/pe
 sudo bash /tmp/my_install_bootstrap.sh
 
 #crontab command
+* * * * * bash /home/cloudflare_ddns_modified-uuc.sh
 */15 * * * *  sudo bash /home/miniupnp.sh
