@@ -159,14 +159,6 @@ sudo apt-get install iptables-persistent -y
 
 sudo service unifi restart
 
-#Installing Speedtest by Ookla CLI
-sudo apt-get install gnupg1 apt-transport-https dirmngr -y
-export INSTALL_KEY=379CE192D401AB61
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys $INSTALL_KEY
-echo "deb https://ookla.bintray.com/debian generic main" | sudo tee  /etc/apt/sources.list.d/speedtest.list
-sudo apt-get update
-sudo apt-get install speedtest -y
-
 #Downloading Cloudflare DDNS Script
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -O /home/cloudflare_ddns_modified-uuc.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -o /home/cloudflare_ddns_modified-uuc.sh
