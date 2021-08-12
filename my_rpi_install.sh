@@ -186,6 +186,10 @@ sudo service unifi restart
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -O /home/cloudflare_ddns_modified-uuc.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -o /home/cloudflare_ddns_modified-uuc.sh
 
+#Downloading Let's Encrypt Script
+sudo wget https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -O /home/unifi_LE_ssl.sh
+sudo curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -o /home/unifi_LE_ssl.sh
+
 #MiniUPNP Settings
 echo "sudo upnpc -r 3478 udp" | sudo tee -a /home/miniupnp.sh
 echo "sudo upnpc -r 6789 tcp" | sudo tee -a /home/miniupnp.sh
