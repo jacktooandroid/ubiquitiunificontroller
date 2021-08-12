@@ -7,7 +7,7 @@ sudo bash /tmp/my_install_bootstrap.sh
 
 #crontab command
 * * * * * bash /home/cloudflare_ddns_modified-uuc.sh
-30 1 1 */2 *  sudo bash /home/unifi_LE_ssl.sh
+30 1 * * *  sudo bash /home/unifi_LE_ssl.sh
 */15 * * * *  sudo bash /home/miniupnp.sh
 
 # sudo certbot certonly --standalone -d 
