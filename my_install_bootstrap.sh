@@ -51,7 +51,7 @@ sudo apt-mark hold openjdk-11-*
 sudo apt-mark hold openjdk-13-*
 sudo apt-mark hold openjdk-14-*
 sudo apt-mark hold openjdk-16-*
-sudo apt-get update && sudo apt-get install unifi haveged fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc dnsutils -y
+sudo apt-get update && sudo apt-get install unifi haveged certbot fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc dnsutils -y
 #sudo pip3 install --upgrade setuptools
 #sudo pip3 install --upgrade pip
 sudo pip3 install --upgrade glances
