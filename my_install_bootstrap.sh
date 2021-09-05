@@ -43,18 +43,34 @@ if [[ $totalmem -lt 900000 ]]
         echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 fi
 
-#Installing Ubiquiti UniFi Controller and Default JRE
-sudo apt-get install gnupg1 apt-transport-https dirmngr -y
+sudo apt-get update && sudo apt-get install gnupg1 apt-transport-https dirmngr -y
+
+#Downloading Cloudflare DDNS Script
+sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -O /home/cloudflare_ddns_modified-uuc.sh
+sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -o /home/cloudflare_ddns_modified-uuc.sh
+
+#Downloading Let's Encrypt Script
+sudo wget https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -O /home/unifi_LE_ssl.sh
+sudo curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -o /home/unifi_LE_ssl.sh
+
+#Adding Sources
 echo 'deb https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
 wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
+
+#Installing Miscellaneous Software
+curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
+sudo apt-get update
+sudo apt-get install speedtest haveged certbot fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc dnsutils -y
+#sudo pip3 install --upgrade setuptools
+#sudo pip3 install --upgrade pip
+sudo pip3 install --upgrade glances
+
+#Installing Ubiquiti UniFi Controller and Default JRE
 sudo apt-mark hold openjdk-11-*
 sudo apt-mark hold openjdk-13-*
 sudo apt-mark hold openjdk-14-*
 sudo apt-mark hold openjdk-16-*
-sudo apt-get update && sudo apt-get install unifi haveged certbot fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc dnsutils -y
-#sudo pip3 install --upgrade setuptools
-#sudo pip3 install --upgrade pip
-sudo pip3 install --upgrade glances
+sudo apt-get install unifi -y
 #sudo apt-get install default-jre-headless -y
 #sudo service unifi restart
 #sleep 10
@@ -93,14 +109,6 @@ echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo deb
 sudo apt-get install iptables-persistent -y
 
 sudo service unifi restart
-
-#Downloading Cloudflare DDNS Script
-sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -O /home/cloudflare_ddns_modified-uuc.sh
-sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns_modified-uuc.sh -o /home/cloudflare_ddns_modified-uuc.sh
-
-#Downloading Let's Encrypt Script
-sudo wget https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -O /home/unifi_LE_ssl.sh
-sudo curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -o /home/unifi_LE_ssl.sh
 
 #MiniUPNP Settings
 echo "sudo upnpc -r 3478 udp" | sudo tee -a /home/miniupnp.sh
