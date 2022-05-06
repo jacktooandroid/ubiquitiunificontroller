@@ -70,7 +70,7 @@ sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi
 #Installing Miscellaneous Software
 curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
 sudo apt-get update
-sudo apt-get install speedtest haveged certbot fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc dnsutils -y
+sudo apt-get install speedtest haveged certbot fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc dnsutils rng-tools -y
 #sudo pip3 install --upgrade setuptools
 #sudo pip3 install --upgrade pip
 sudo pip3 install --upgrade glances
