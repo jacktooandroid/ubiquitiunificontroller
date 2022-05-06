@@ -92,7 +92,7 @@ cat system.properties
 echo '# Modifications' | sudo tee -a /usr/lib/unifi/data/system.properties
 echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties
 
-TOTALUNIFIXMX=$TOTALMEMMBROUNDED-1024
+TOTALUNIFIXMX=$((TOTALMEMMBROUNDED-1024))
 if [[ $TOTALUNIFIXMX -gt 1024 ]]
     then
         echo 'unifi.xmx='$TOTALUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties
