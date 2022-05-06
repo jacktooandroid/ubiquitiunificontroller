@@ -29,24 +29,25 @@ sleep 3
 
 #Checking Memory Requirements
 clear
-memtotal=$(cat /proc/meminfo | grep MemTotal | grep -o '[0-9]*')
-swaptotal=$(cat /proc/meminfo | grep SwapTotal | grep -o '[0-9]*')
-totalmem=$(($memtotal + $swaptotal))
-totalmemgbrounded=$((($totalmem+(1000000/2))/1000000))
-totalmemrequired=4
-totalmemtoadd=$(($totalmemrequired - $totalmemgbrounded))
+TOTALMEM=$(cat /proc/meminfo | grep MemTotal | grep -o '[0-9]*')
+TOTALMEMMBROUNDED=$((($TOTALMEM+(1000/2))/1000))
+TOTALSWAP=$(cat /proc/meminfo | grep SwapTotal | grep -o '[0-9]*')
+TOTALMEMSWAP=$(($TOTALMEM + $TOTALSWAP))
+TOTALMEMSWAPGBROUNDED=$((($TOTALMEMSWAP+(1000000/2))/1000000))
+TOTALMEMSWAPREQUIRED=4
+TOTALSWAPTOADD=$(($TOTALMEMSWAPREQUIRED - $TOTALMEMSWAPGBROUNDED))
 G=G
 
-if [[ $totalmemtoadd -gt 0 ]]
+if [[ $TOTALSWAPTOADD -gt 0 ]]
     then
-        sudo fallocate -l $totalmemtoadd$G /swapfile
+        sudo fallocate -l $TOTALSWAPTOADD$G /swapfile
         sudo chmod 600 /swapfile
         sudo mkswap /swapfile
         sudo swapon /swapfile
         sudo cp /etc/fstab /etc/fstab.bak
         echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
     else
-        echo 'Additional swap memory not added as at least 4GB of memory (rounded) has been installed on this server'
+        echo 'Additional swap memory not added as at least 4GB of memory + swap (rounded) has been installed on this server'
 fi
 
 sudo apt-get update && sudo apt-get install gnupg1 apt-transport-https dirmngr -y
@@ -86,19 +87,16 @@ sudo apt-get install unifi -y
 #sleep 10
 
 #Configure Ubiquiti UniFi Controller Java Memory (heap size) Allocation
-if [[ $totalmemgbrounded -gt 1 ]]
+cd /usr/lib/unifi/data
+cat system.properties
+echo '# Modifications' | sudo tee -a /usr/lib/unifi/data/system.properties
+echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties
+
+TOTALUNIFIXMX=$TOTALMEMMBROUNDED-1024
+if [[ $TOTALUNIFIXMX -gt 1024 ]]
     then
-        totalmemmbrounded=$((($totalmem+(1000/2))/1000))
-        cd /usr/lib/unifi/data
-        cat system.properties
-        echo '# Modifications' | sudo tee -a /usr/lib/unifi/data/system.properties
-        echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties
-        echo 'unifi.xmx='$totalmemmbrounded | sudo tee -a /usr/lib/unifi/data/system.properties
+        echo 'unifi.xmx='$TOTALUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties
     else
-        cd /usr/lib/unifi/data
-        cat system.properties
-        echo '# Modifications' | sudo tee -a /usr/lib/unifi/data/system.properties
-        echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties
         echo 'unifi.xmx=1024' | sudo tee -a /usr/lib/unifi/data/system.properties
 fi
 
