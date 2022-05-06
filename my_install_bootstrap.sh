@@ -69,6 +69,7 @@ echo 'deb https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee 
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 
 #Installing Miscellaneous Software
+sleep 5
 curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
 sudo apt-get update
 sudo apt-get install speedtest haveged certbot fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc dnsutils rng-tools -y
@@ -77,14 +78,21 @@ sudo apt-get install speedtest haveged certbot fail2ban traceroute glances pytho
 sudo pip3 install --upgrade glances
 
 #Installing Ubiquiti UniFi Controller and Default JRE
+sudo apt-mark hold openjdk-9-*
+sudo apt-mark hold openjdk-10-*
 sudo apt-mark hold openjdk-11-*
+sudo apt-mark hold openjdk-12-*
 sudo apt-mark hold openjdk-13-*
 sudo apt-mark hold openjdk-14-*
+sudo apt-mark hold openjdk-15-*
 sudo apt-mark hold openjdk-16-*
+sudo apt-mark hold openjdk-17-*
+sudo apt-mark hold openjdk-18-*
+sudo apt-mark hold openjdk-19-*
 sudo apt-get install unifi -y
 #sudo apt-get install default-jre-headless -y
 #sudo service unifi restart
-#sleep 10
+sleep 5
 
 #Configure Ubiquiti UniFi Controller Java Memory (heap size) Allocation
 cd /usr/lib/unifi/data
