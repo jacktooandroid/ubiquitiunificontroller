@@ -116,7 +116,7 @@ sudo apt-get install unifi -y
 
 #SSL Configuration
 echo ''
-echo "/usr/lib/unifi/data/system.properties Configurations"
+echo "***** /usr/lib/unifi/data/system.properties Configurations *****"
 echo 'unifi.https.sslEnabledProtocols=TLSv1.3,TLSv1.2' | sudo tee -a /usr/lib/unifi/data/system.properties
 echo 'unifi.https.ciphers=TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256' | sudo tee -a /usr/lib/unifi/data/system.properties
 
