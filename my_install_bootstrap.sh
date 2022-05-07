@@ -37,7 +37,6 @@ TOTALSWAP=$(cat /proc/meminfo | grep SwapTotal | grep -o '[0-9]*')
 TOTALMEMSWAP=$(($TOTALMEM+$TOTALSWAP))
 TOTALMEMSWAPGBROUNDED=$((($TOTALMEMSWAP+(1000000/2))/1000000))
 G=G
-
 if [[ $(($TOTALMEMSWAPREQUIREDGB-$TOTALMEMSWAPGBROUNDED)) -gt 0 ]]
     then
         TOTALSWAPTOADDGB=$(($TOTALMEMSWAPREQUIREDGB-$TOTALMEMSWAPGBROUNDED))
@@ -47,13 +46,16 @@ fi
 
 #UniFi Memory Logic and Variables
 MINIMUMUNIFIXMX=512
-
 if [[ $TOTALMEMGBROUNDED -gt 2 ]]
     then
-        TOTALUNIFIXMX=$(((TOTALMEMGBROUNDED-1)*1024/2))
+        TOTALUNIFIXMX=$((($TOTALMEMGBROUNDED-1)*1024/2))
     else
-        TOTALUNIFIXMX=$(((TOTALMEMGBROUNDED)*1024/2))
+        TOTALUNIFIXMX=$((($TOTALMEMGBROUNDED)*1024/2))
 fi
+
+#MongoDB Cache Logic and Variables
+MINIMUMMONGODBCACHE=256
+TOTALMONGODBCACHE=$((($TOTALMEMGBROUNDED-1)*1024/2))
 
 #Check Memory Requirements
 if [[ $TOTALSWAPTOADDGB -gt 0 ]]
@@ -120,7 +122,6 @@ echo 'unifi.https.ciphers=TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDH
 cd /usr/lib/unifi/data
 cat system.properties
 echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties
-
 if [[ $TOTALUNIFIXMX -gt $MINIMUMUNIFIXMX ]]
     then
         echo 'unifi.xmx='$TOTALUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties
@@ -128,12 +129,18 @@ if [[ $TOTALUNIFIXMX -gt $MINIMUMUNIFIXMX ]]
         echo 'unifi.xmx='$MINIMUMUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties
 fi
 
+#MongoDB Default Cache Size Configuration
+#echo 'db.mongo.wt.cache_size_default=true' | sudo tee -a /usr/lib/unifi/data/system.properties
+if [[ $TOTALMONGODBCACHE -gt $MINIMUMMONGODBCACHE ]]
+    then
+        echo 'db.mongo.wt.cache_size='$TOTALMONGODBCACHE | sudo tee -a /usr/lib/unifi/data/system.properties
+    else
+        echo 'db.mongo.wt.cache_size='$MINIMUMMONGODBCACHE | sudo tee -a /usr/lib/unifi/data/system.properties        
+fi
+
 #Inform Configuration
 echo 'inform.num_thread=200' | sudo tee -a /usr/lib/unifi/data/system.properties
 echo 'inform.max_keep_alive_requests=100' | sudo tee -a /usr/lib/unifi/data/system.properties
-
-#Enable MongoDB WireTiger Default Cache Size
-echo 'db.mongo.wt.cache_size_default=true' | sudo tee -a /usr/lib/unifi/data/system.properties
 
 #Enable High Performance Java Garbage Collector
 echo 'unifi.G1GC.enabled=true' | sudo tee -a /usr/lib/unifi/data/system.properties
