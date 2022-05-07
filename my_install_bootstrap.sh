@@ -88,7 +88,7 @@ sudo curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroll
 echo 'deb https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 
-#Installing Miscellaneous Software
+#Install Miscellaneous Software
 curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
 sudo apt-get update
 sudo apt-get install speedtest haveged certbot fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc dnsutils rng-tools -y
@@ -96,7 +96,7 @@ sudo apt-get install speedtest haveged certbot fail2ban traceroute glances pytho
 #sudo pip3 install --upgrade pip
 sudo pip3 install --upgrade glances
 
-#Installing Ubiquiti UniFi Controller and Default JRE
+#Install Ubiquiti UniFi Controller and Default JRE
 sudo apt-mark hold openjdk-9-*
 sudo apt-mark hold openjdk-10-*
 sudo apt-mark hold openjdk-11-*
