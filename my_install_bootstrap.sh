@@ -36,6 +36,7 @@ TOTALMEMGBROUNDED=$((($TOTALMEM+(1000000/2))/1000000))
 TOTALSWAP=$(cat /proc/meminfo | grep SwapTotal | grep -o '[0-9]*')
 TOTALMEMSWAP=$(($TOTALMEM+$TOTALSWAP))
 TOTALMEMSWAPGBROUNDED=$((($TOTALMEMSWAP+(1000000/2))/1000000))
+G=G
 
 if [[ $(($TOTALMEMSWAPREQUIREDGB-$TOTALMEMSWAPGBROUNDED)) -gt 0 ]]
     then
@@ -43,8 +44,6 @@ if [[ $(($TOTALMEMSWAPREQUIREDGB-$TOTALMEMSWAPGBROUNDED)) -gt 0 ]]
     else
         TOTALSWAPTOADDGB=0
 fi
-
-G=G
 
 #UniFi Memory Logic and Variables
 MINIMUMUNIFIXMX=512
@@ -113,10 +112,13 @@ sudo apt-get install unifi -y
 #sudo service unifi restart
 #sleep 10
 
-#Configure Ubiquiti UniFi Controller Java Memory (heap size) Allocation
+#SSL Configuration
+echo 'unifi.https.sslEnabledProtocols=TLSv1.3,TLSv1.2' | sudo tee -a /usr/lib/unifi/data/system.properties
+echo 'unifi.https.ciphers=TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256' | sudo tee -a /usr/lib/unifi/data/system.properties
+
+#Java Heap Size Configuration
 cd /usr/lib/unifi/data
 cat system.properties
-echo '# Modifications' | sudo tee -a /usr/lib/unifi/data/system.properties
 echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties
 
 if [[ $TOTALUNIFIXMX -gt $MINIMUMUNIFIXMX ]]
@@ -126,15 +128,15 @@ if [[ $TOTALUNIFIXMX -gt $MINIMUMUNIFIXMX ]]
         echo 'unifi.xmx='$MINIMUMUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties
 fi
 
-#Custom SSL Configuration
-echo 'unifi.https.sslEnabledProtocols=TLSv1.3,TLSv1.2' | sudo tee -a /usr/lib/unifi/data/system.properties
-echo 'unifi.https.ciphers=TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256' | sudo tee -a /usr/lib/unifi/data/system.properties
-
-#Enable High Performance Java Garbage Collector
-echo 'unifi.G1GC.enabled=true' | sudo tee -a /usr/lib/unifi/data/system.properties
+#Inform Configuration
+echo 'inform.num_thread=200' | sudo tee -a /usr/lib/unifi/data/system.properties
+echo 'inform.max_keep_alive_requests=100' | sudo tee -a /usr/lib/unifi/data/system.properties
 
 #Enable MongoDB WireTiger Default Cache Size
 echo 'db.mongo.wt.cache_size_default=true' | sudo tee -a /usr/lib/unifi/data/system.properties
+
+#Enable High Performance Java Garbage Collector
+echo 'unifi.G1GC.enabled=true' | sudo tee -a /usr/lib/unifi/data/system.properties
 
 #Redirect port 443 to 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
