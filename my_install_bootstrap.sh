@@ -27,32 +27,52 @@ echo ''
 echo 'Installation will continue in 3 seconds...'
 sleep 3
 
-#Checking Memory Requirements
 clear
+
+#System Memory Logic and Variables
+TOTALMEMSWAPREQUIREDGB=2
 TOTALMEM=$(cat /proc/meminfo | grep MemTotal | grep -o '[0-9]*')
-TOTALMEMMBROUNDED=$((($TOTALMEM+(1000/2))/1000))
+TOTALMEMGBROUNDED=$((($TOTALMEM+(1000000/2))/1000000))
 TOTALSWAP=$(cat /proc/meminfo | grep SwapTotal | grep -o '[0-9]*')
-TOTALMEMSWAP=$(($TOTALMEM + $TOTALSWAP))
+TOTALMEMSWAP=$(($TOTALMEM+$TOTALSWAP))
 TOTALMEMSWAPGBROUNDED=$((($TOTALMEMSWAP+(1000000/2))/1000000))
-TOTALMEMSWAPREQUIRED=4
-TOTALSWAPTOADD=$(($TOTALMEMSWAPREQUIRED - $TOTALMEMSWAPGBROUNDED))
+
+if [[ $(($TOTALMEMSWAPREQUIREDGB-$TOTALMEMSWAPGBROUNDED)) -gt 0 ]]
+    then
+        TOTALSWAPTOADDGB=$(($TOTALMEMSWAPREQUIREDGB-$TOTALMEMSWAPGBROUNDED))
+    else
+        TOTALSWAPTOADDGB=0
+fi
+
 G=G
 
-if [[ $TOTALSWAPTOADD -gt 0 ]]
+#UniFi Memory Logic and Variables
+MINIMUMUNIFIXMX=512
+
+if [[ $TOTALMEMGBROUNDED -gt 2 ]]
     then
-        sudo fallocate -l $TOTALSWAPTOADD$G /swapfile
+        TOTALUNIFIXMX=$(((TOTALMEMGBROUNDED-1)*1024/2))
+    else
+        TOTALUNIFIXMX=$(((TOTALMEMGBROUNDED)*1024/2))
+fi
+
+#Check Memory Requirements
+if [[ $TOTALSWAPTOADDGB -gt 0 ]]
+    then
+        sudo fallocate -l $TOTALSWAPTOADDGB$G /swapfile
         sudo chmod 600 /swapfile
         sudo mkswap /swapfile
         sudo swapon /swapfile
         sudo cp /etc/fstab /etc/fstab.bak
         echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
     else
-        echo 'Additional swap memory not added as at least 4GB of memory + swap (rounded) has been installed on this server'
+        echo 'Additional swap memory not added as at least '$TOTALMEMSWAPREQUIREDGB'GB of memory + swap (rounded) has been installed on this server'
 fi
 
+#Install Prerequisites
 sudo apt-get update && sudo apt-get install gnupg1 apt-transport-https dirmngr -y
 
-#Downloading Cloudflare DDNS Script
+#Download Cloudflare DDNS Script
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-una.sh -O /usr/local/bin/cloudflare_ddns-una.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-una.sh -o /usr/local/bin/cloudflare_ddns-una.sh
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_cname-una.sh -O /tmp/cloudflare_cname-una.sh
@@ -60,11 +80,11 @@ sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/clo
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-restoredefault.sh -O /tmp/cloudflare_ddns-restoredefault.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-restoredefault.sh -o /tmp/cloudflare_ddns-restoredefault.sh
 
-#Downloading Let's Encrypt Script
+#Download Let's Encrypt Script
 sudo wget https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -O /usr/local/sbin/unifi_LE_ssl.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -o /usr/local/sbin/unifi_LE_ssl.sh
 
-#Adding Sources
+#Add Sources
 echo 'deb https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 
@@ -91,6 +111,7 @@ sudo apt-mark hold openjdk-19-*
 sudo apt-get install unifi -y
 #sudo apt-get install default-jre-headless -y
 #sudo service unifi restart
+#sleep 10
 
 #Configure Ubiquiti UniFi Controller Java Memory (heap size) Allocation
 cd /usr/lib/unifi/data
@@ -98,31 +119,31 @@ cat system.properties
 echo '# Modifications' | sudo tee -a /usr/lib/unifi/data/system.properties
 echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties
 
-TOTALUNIFIXMX=$((TOTALMEMMBROUNDED-1024))
-if [[ $TOTALUNIFIXMX -gt 1024 ]]
+if [[ $TOTALUNIFIXMX -gt $MINIMUMUNIFIXMX ]]
     then
         echo 'unifi.xmx='$TOTALUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties
     else
-        echo 'unifi.xmx=1024' | sudo tee -a /usr/lib/unifi/data/system.properties
+        echo 'unifi.xmx='$MINIMUMUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties
 fi
 
 #Custom SSL Configuration
 echo 'unifi.https.sslEnabledProtocols=TLSv1.3,TLSv1.2' | sudo tee -a /usr/lib/unifi/data/system.properties
 echo 'unifi.https.ciphers=TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256' | sudo tee -a /usr/lib/unifi/data/system.properties
 
-#Enabling High Performance Java Garbage Collector
+#Enable High Performance Java Garbage Collector
 echo 'unifi.G1GC.enabled=true' | sudo tee -a /usr/lib/unifi/data/system.properties
+
+#Enable MongoDB WireTiger Default Cache Size
+echo 'db.mongo.wt.cache_size_default=true' | sudo tee -a /usr/lib/unifi/data/system.properties
 
 #Redirect port 443 to 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 
-#Installing iptables-persistent
+#Install iptables-persistent
 echo 'iptables-persistent iptables-persistent/autosave_v4 boolean true' | sudo debconf-set-selections
 echo 'iptables-persistent iptables-persistent/autosave_v6 boolean true' | sudo debconf-set-selections
 sudo apt-get install iptables-persistent -y
-
-sudo service unifi restart
 
 #MiniUPNP Settings
 echo 'upnpc -r 3478 udp' | sudo tee -a /usr/local/bin/miniupnp.sh
