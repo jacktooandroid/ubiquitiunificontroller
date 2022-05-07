@@ -115,12 +115,12 @@ sudo apt-get install unifi -y
 #sleep 10
 
 #SSL Configuration
+echo ''
+echo "system.properties Configurations"
 echo 'unifi.https.sslEnabledProtocols=TLSv1.3,TLSv1.2' | sudo tee -a /usr/lib/unifi/data/system.properties
 echo 'unifi.https.ciphers=TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256' | sudo tee -a /usr/lib/unifi/data/system.properties
 
 #Java Heap Size Configuration
-cd /usr/lib/unifi/data
-cat system.properties
 echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties
 if [[ $TOTALUNIFIXMX -gt $MINIMUMUNIFIXMX ]]
     then
@@ -144,6 +144,7 @@ echo 'inform.max_keep_alive_requests=100' | sudo tee -a /usr/lib/unifi/data/syst
 
 #Enable High Performance Java Garbage Collector
 echo 'unifi.G1GC.enabled=true' | sudo tee -a /usr/lib/unifi/data/system.properties
+echo ''
 
 #Redirect port 443 to 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
