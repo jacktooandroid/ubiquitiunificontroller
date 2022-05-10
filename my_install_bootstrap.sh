@@ -29,7 +29,7 @@ sleep 3
 
 clear
 
-#System Memory Logic and Variables
+#System Memory Logic(s) and Variable(s)
 TOTALMEMSWAPREQUIREDGB=2
 TOTALMEM=$(cat /proc/meminfo | grep MemTotal | grep -o '[0-9]*')
 TOTALMEMGBROUNDED=$((($TOTALMEM+(1000000/2))/1000000))
@@ -44,7 +44,7 @@ if [[ $(($TOTALMEMSWAPREQUIREDGB-$TOTALMEMSWAPGBROUNDED)) -gt 0 ]]
         TOTALSWAPTOADDGB=0
 fi
 
-#UniFi Memory Logic and Variables
+#UniFi Memory Logic(s) and Variable(s)
 MINIMUMUNIFIXMX=512
 if [[ $TOTALMEMGBROUNDED -gt 2 ]]
     then
@@ -53,11 +53,11 @@ if [[ $TOTALMEMGBROUNDED -gt 2 ]]
         TOTALUNIFIXMX=$((($TOTALMEMGBROUNDED)*1024/2))
 fi
 
-#MongoDB Cache Logic and Variables
+#MongoDB Cache Logic(s) and Variable(s)
 MINIMUMMONGODBCACHE=256
 TOTALMONGODBCACHE=$((($TOTALMEMGBROUNDED-1)*1024/2))
 
-#Check Memory Requirements
+#Check Memory Requirement
 if [[ $TOTALSWAPTOADDGB -gt 0 ]]
     then
         sudo fallocate -l $TOTALSWAPTOADDGB$G /swapfile
@@ -73,7 +73,7 @@ fi
 #Install Prerequisites
 sudo apt-get update && sudo apt-get install ca-certificates apt-transport-https gnupg1 dirmngr curl wget -y
 
-#Download Cloudflare DDNS Script
+#Download Cloudflare Scripts
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-una.sh -O /usr/local/bin/cloudflare_ddns-una.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-una.sh -o /usr/local/bin/cloudflare_ddns-una.sh
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_cname-una.sh -O /tmp/cloudflare_cname-una.sh
@@ -149,7 +149,7 @@ echo ''
 #Restart UniFi Network Application to Apply Configurations
 sudo service unifi restart
 
-#Redirect port 443 to 8443
+#Redirect UniFi Network Application Ports
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 
