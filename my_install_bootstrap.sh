@@ -97,7 +97,7 @@ sudo apt-get install speedtest haveged certbot fail2ban traceroute glances pytho
 #sudo pip3 install --upgrade pip
 sudo pip3 install --upgrade glances
 
-#Install Ubiquiti UniFi Controller and Default JRE
+#Install UniFi Network Application and Default JRE
 sudo apt-mark hold openjdk-9-*
 sudo apt-mark hold openjdk-10-*
 sudo apt-mark hold openjdk-11-*
@@ -116,35 +116,38 @@ sudo apt-get install unifi -y
 
 #SSL Configuration
 echo ''
-echo "***** /usr/lib/unifi/data/system.properties Configurations *****"
-echo 'unifi.https.sslEnabledProtocols=TLSv1.3,TLSv1.2' | sudo tee -a /usr/lib/unifi/data/system.properties
-echo 'unifi.https.ciphers=TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256' | sudo tee -a /usr/lib/unifi/data/system.properties
+echo "***** /usr/lib/unifi/data/system.properties Configurations *****" | sudo tee -a /tmp/unifi_system.properties_configurations.txt
+echo 'unifi.https.sslEnabledProtocols=TLSv1.3,TLSv1.2' | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
+echo 'unifi.https.ciphers=TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256' | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
 
 #Java Heap Size Configuration
-echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties
+echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
 if [[ $TOTALUNIFIXMX -gt $MINIMUMUNIFIXMX ]]
     then
-        echo 'unifi.xmx='$TOTALUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties
+        echo 'unifi.xmx='$TOTALUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
     else
-        echo 'unifi.xmx='$MINIMUMUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties
+        echo 'unifi.xmx='$MINIMUMUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
 fi
 
 #MongoDB Default Cache Size Configuration
-#echo 'db.mongo.wt.cache_size_default=true' | sudo tee -a /usr/lib/unifi/data/system.properties
+#echo 'db.mongo.wt.cache_size_default=true' | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
 if [[ $TOTALMONGODBCACHE -gt $MINIMUMMONGODBCACHE ]]
     then
-        echo 'db.mongo.wt.cache_size='$TOTALMONGODBCACHE | sudo tee -a /usr/lib/unifi/data/system.properties
+        echo 'db.mongo.wt.cache_size='$TOTALMONGODBCACHE | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
     else
-        echo 'db.mongo.wt.cache_size='$MINIMUMMONGODBCACHE | sudo tee -a /usr/lib/unifi/data/system.properties        
+        echo 'db.mongo.wt.cache_size='$MINIMUMMONGODBCACHE | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
 fi
 
 #Inform Configuration
-echo 'inform.num_thread=200' | sudo tee -a /usr/lib/unifi/data/system.properties
-echo 'inform.max_keep_alive_requests=100' | sudo tee -a /usr/lib/unifi/data/system.properties
+echo 'inform.num_thread=200' | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
+echo 'inform.max_keep_alive_requests=100' | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
 
 #Enable High Performance Java Garbage Collector
-echo 'unifi.G1GC.enabled=true' | sudo tee -a /usr/lib/unifi/data/system.properties
+echo 'unifi.G1GC.enabled=true' | sudo tee -a /usr/lib/unifi/data/system.properties | sudo tee -a /tmp/unifi_system.properties_configurations.txt
 echo ''
+
+#Restart UniFi Network Application to Apply Configurations
+sudo service unifi restart
 
 #Redirect port 443 to 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
