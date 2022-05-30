@@ -92,10 +92,13 @@ sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi
 #Install Miscellaneous Software
 curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
 sudo apt-get update
-sudo apt-get install speedtest haveged certbot fail2ban traceroute glances python3-pip iperf3 lynx miniupnpc dnsutils rng-tools -y
-#sudo pip3 install --upgrade setuptools
-#sudo pip3 install --upgrade pip
-sudo pip3 install --upgrade glances
+sudo apt-get install speedtest haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils rng-tools -y
+sudo apt-get install -y python3-pip python3-dev python3-docker gcc lm-sensors wireless-tools
+sudo apt-get install -y python3 python3-psutil python3-setuptools
+sudo pip3 install glances
+# sudo pip3 install --upgrade setuptools
+# sudo pip3 install --upgrade pip
+# sudo pip3 install --upgrade glances
 
 #Install UniFi Network Application and Default JRE
 sudo apt-mark hold openjdk-9-*
@@ -110,9 +113,9 @@ sudo apt-mark hold openjdk-17-*
 sudo apt-mark hold openjdk-18-*
 sudo apt-mark hold openjdk-19-*
 sudo apt-get install unifi -y
-#sudo apt-get install default-jre-headless -y
-#sudo service unifi restart
-#sleep 10
+# sudo apt-get install default-jre-headless -y
+# sudo service unifi restart
+# sleep 10
 
 #SSL Configuration
 echo ''
@@ -130,7 +133,7 @@ if [[ $TOTALUNIFIXMX -gt $MINIMUMUNIFIXMX ]]
 fi
 
 #MongoDB Default Cache Size Configuration
-#echo 'db.mongo.wt.cache_size_default=true' | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
+# echo 'db.mongo.wt.cache_size_default=true' | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
 if [[ $TOTALMONGODBCACHE -gt $MINIMUMMONGODBCACHE ]]
     then
         echo 'db.mongo.wt.cache_size='$TOTALMONGODBCACHE | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
@@ -159,12 +162,25 @@ echo 'iptables-persistent iptables-persistent/autosave_v6 boolean true' | sudo d
 sudo apt-get install iptables-persistent -y
 
 #MiniUPNP Settings
-echo 'upnpc -r 3478 udp' | sudo tee -a /usr/local/bin/miniupnp.sh
+echo 'upnpc -r 80 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
+echo 'upnpc -r 443 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
 echo 'upnpc -r 6789 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
 echo 'upnpc -r 8080 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
 echo 'upnpc -r 8443 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
 echo 'upnpc -r 8880 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
 echo 'upnpc -r 8843 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
-#bash /usr/local/bin/miniupnp.sh
+echo 'upnpc -r 3478 udp' | sudo tee -a /usr/local/bin/miniupnp.sh
+# bash /usr/local/bin/miniupnp.sh
+
+#NATPMP Settings
+echo "natpmpc -a 80 80 tcp" | sudo tee -a /usr/local/bin/natpmp.sh
+echo "natpmpc -a 443 443 tcp" | sudo tee -a /usr/local/bin/natpmp.sh
+echo "natpmpc -a 6789 6789 tcp" | sudo tee -a /usr/local/bin/natpmp.sh
+echo "natpmpc -a 8080 8080 tcp" | sudo tee -a /usr/local/bin/natpmp.sh
+echo "natpmpc -a 8443 8443 tcp" | sudo tee -a /usr/local/bin/natpmp.sh
+echo "natpmpc -a 8880 8880 tcp" | sudo tee -a /usr/local/bin/natpmp.sh
+echo "natpmpc -a 8843 8843 tcp" | sudo tee -a /usr/local/bin/natpmp.sh
+echo "natpmpc -a 3478 3478 udp" | sudo tee -a /usr/local/bin/natpmp.sh
+# bash /usr/local/bin/natpmp.sh
 
 exit
