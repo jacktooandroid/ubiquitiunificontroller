@@ -90,12 +90,13 @@ echo 'deb https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee 
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 
 #Install Miscellaneous Software
-curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
 sudo apt-get update
-sudo apt-get install -y --allow-unauthenticated speedtest haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils rng-tools
+sudo apt-get install -y haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils rng-tools
 sudo apt-get install -y python3-pip python3-dev python3-docker gcc lm-sensors wireless-tools
 sudo apt-get install -y python3 python3-psutil python3-setuptools
 sudo pip3 install glances
+# curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
+# sudo apt-get install -y speedtest
 # sudo pip3 install --upgrade setuptools
 # sudo pip3 install --upgrade pip
 # sudo pip3 install --upgrade glances
