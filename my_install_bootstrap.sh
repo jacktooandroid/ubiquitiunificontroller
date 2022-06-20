@@ -71,7 +71,7 @@ if [[ $TOTALSWAPTOADDGB -gt 0 ]]
 fi
 
 #Install Prerequisites
-sudo apt-get update && sudo apt-get install ca-certificates apt-transport-https gnupg1 dirmngr curl wget -y
+sudo apt-get update && sudo apt-get -y install ca-certificates apt-transport-https gnupg1 dirmngr curl wget
 
 #Download Cloudflare Scripts
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-una.sh -O /usr/local/bin/cloudflare_ddns-una.sh
@@ -92,7 +92,7 @@ sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi
 #Install Miscellaneous Software
 curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
 sudo apt-get update
-sudo apt-get install speedtest haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils rng-tools -y
+sudo apt-get install -y --allow-unauthenticated speedtest haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils rng-tools
 sudo apt-get install -y python3-pip python3-dev python3-docker gcc lm-sensors wireless-tools
 sudo apt-get install -y python3 python3-psutil python3-setuptools
 sudo pip3 install glances
@@ -112,8 +112,8 @@ sudo apt-mark hold openjdk-16-*
 sudo apt-mark hold openjdk-17-*
 sudo apt-mark hold openjdk-18-*
 sudo apt-mark hold openjdk-19-*
-sudo apt-get install unifi -y
-# sudo apt-get install default-jre-headless -y
+sudo apt-get -y install unifi
+# sudo apt-get -y install default-jre-headless
 # sudo service unifi restart
 # sleep 10
 
@@ -159,7 +159,7 @@ sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 #Install iptables-persistent
 echo 'iptables-persistent iptables-persistent/autosave_v4 boolean true' | sudo debconf-set-selections
 echo 'iptables-persistent iptables-persistent/autosave_v6 boolean true' | sudo debconf-set-selections
-sudo apt-get install iptables-persistent -y
+sudo apt-get -y install iptables-persistent
 
 #MiniUPNP Settings
 echo 'upnpc -r 80 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
