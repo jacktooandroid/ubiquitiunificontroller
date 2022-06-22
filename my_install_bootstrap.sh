@@ -91,7 +91,7 @@ sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi
 
 #Install Miscellaneous Software
 sudo apt-get update
-sudo apt-get install -y haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils rng-tools
+sudo apt-get install -y haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils
 sudo apt-get install -y python3-pip python3-dev python3-docker gcc lm-sensors wireless-tools
 sudo apt-get install -y python3 python3-psutil python3-setuptools
 sudo pip3 install glances
