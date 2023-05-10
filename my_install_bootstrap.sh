@@ -94,7 +94,7 @@ sudo apt-get update
 sudo apt-get install -y haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils
 sudo apt-get install -y python3-pip python3-dev python3-docker gcc lm-sensors wireless-tools
 sudo apt-get install -y python3 python3-psutil python3-setuptools
-sudo pip3 install glances
+sudo apt-get install -y glances
 # curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
 # sudo apt-get install -y speedtest
 # sudo pip3 install --upgrade setuptools
