@@ -102,17 +102,17 @@ sudo apt-get install -y glances
 # sudo pip3 install --upgrade glances
 
 #Install UniFi Network Application and Default JRE
-sudo apt-mark hold openjdk-9-*
-sudo apt-mark hold openjdk-10-*
-sudo apt-mark hold openjdk-11-*
-sudo apt-mark hold openjdk-12-*
-sudo apt-mark hold openjdk-13-*
-sudo apt-mark hold openjdk-14-*
-sudo apt-mark hold openjdk-15-*
-sudo apt-mark hold openjdk-16-*
-sudo apt-mark hold openjdk-17-*
-sudo apt-mark hold openjdk-18-*
-sudo apt-mark hold openjdk-19-*
+# sudo apt-mark hold openjdk-9-*
+# sudo apt-mark hold openjdk-10-*
+# sudo apt-mark hold openjdk-11-*
+# sudo apt-mark hold openjdk-12-*
+# sudo apt-mark hold openjdk-13-*
+# sudo apt-mark hold openjdk-14-*
+# sudo apt-mark hold openjdk-15-*
+# sudo apt-mark hold openjdk-16-*
+# sudo apt-mark hold openjdk-17-*
+# sudo apt-mark hold openjdk-18-*
+# sudo apt-mark hold openjdk-19-*
 sudo apt-get -y install unifi
 # sudo apt-get -y install default-jre-headless
 # sudo service unifi restart
