@@ -93,7 +93,7 @@ echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] http://repo.m
 
 #Install Miscellaneous Software
 sudo apt-get update
-sudo apt-get install -y haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils
+sudo apt-get install -y haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils cron
 sudo apt-get install -y python3-pip python3-dev python3-docker gcc lm-sensors wireless-tools
 sudo apt-get install -y python3 python3-psutil python3-setuptools
 sudo apt-get install -y glances
