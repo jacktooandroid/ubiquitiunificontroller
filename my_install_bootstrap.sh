@@ -71,7 +71,7 @@ if [[ $TOTALSWAPTOADDGB -gt 0 ]]
 fi
 
 # Install prerequisites
-sudo apt update && sudo apt -y install ca-certificates apt-transport-https gnupg2 dirmngr curl wget
+sudo apt update && sudo apt -y install ca-certificates apt-transport-https gnupg dirmngr curl wget
 
 # Download Cloudflare scripts
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-una.sh -O /usr/local/bin/cloudflare_ddns-una.sh
