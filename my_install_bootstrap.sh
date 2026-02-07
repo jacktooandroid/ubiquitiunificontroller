@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#License
+# License
 clear
 echo 'MIT License'
 echo ''
@@ -29,7 +29,7 @@ sleep 3
 
 clear
 
-#System Memory Logic(s) and Variable(s)
+# System memory logic(s) and variable(s)
 TOTALMEMSWAPREQUIREDGB=2
 TOTALMEM=$(cat /proc/meminfo | grep MemTotal | grep -o '[0-9]*')
 TOTALMEMGBROUNDED=$((($TOTALMEM+(1000000/2))/1000000))
@@ -44,7 +44,7 @@ if [[ $(($TOTALMEMSWAPREQUIREDGB-$TOTALMEMSWAPGBROUNDED)) -gt 0 ]]
         TOTALSWAPTOADDGB=0
 fi
 
-#UniFi Memory Logic(s) and Variable(s)
+# UniFi memory logic(s) and variable(s)
 MINIMUMUNIFIXMX=512
 if [[ $TOTALMEMGBROUNDED -gt 2 ]]
     then
@@ -53,11 +53,11 @@ if [[ $TOTALMEMGBROUNDED -gt 2 ]]
         TOTALUNIFIXMX=$((($TOTALMEMGBROUNDED)*1024/2))
 fi
 
-#MongoDB Cache Logic(s) and Variable(s)
+# MongoDB Cache logic(s) and variable(s)
 MINIMUMMONGODBCACHE=256
 TOTALMONGODBCACHE=$((($TOTALMEMGBROUNDED-1)*1024/2))
 
-#Check Memory Requirement
+# Check memory requirement
 if [[ $TOTALSWAPTOADDGB -gt 0 ]]
     then
         sudo fallocate -l $TOTALSWAPTOADDGB$G /swapfile
@@ -70,10 +70,10 @@ if [[ $TOTALSWAPTOADDGB -gt 0 ]]
         echo 'Additional swap memory not added as at least '$TOTALMEMSWAPREQUIREDGB'GB of memory + swap (rounded) has been installed on this server'
 fi
 
-#Install Prerequisites
-sudo apt-get update && sudo apt-get -y install ca-certificates apt-transport-https gnupg1 dirmngr curl wget
+# Install prerequisites
+sudo apt update && sudo apt -y install ca-certificates apt-transport-https gnupg2 dirmngr curl wget
 
-#Download Cloudflare Scripts
+# Download Cloudflare scripts
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-una.sh -O /usr/local/bin/cloudflare_ddns-una.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-una.sh -o /usr/local/bin/cloudflare_ddns-una.sh
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_cname-una.sh -O /tmp/cloudflare_cname-una.sh
@@ -81,52 +81,42 @@ sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/clo
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-restoredefault.sh -O /tmp/cloudflare_ddns-restoredefault.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-restoredefault.sh -o /tmp/cloudflare_ddns-restoredefault.sh
 
-#Download Let's Encrypt Script
+# Download Let's Encrypt script
 sudo wget https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -O /usr/local/sbin/unifi_LE_ssl.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -o /usr/local/sbin/unifi_LE_ssl.sh
 
-#Add Sources
+# Add sources
+wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
+echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
+curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
+echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 echo 'deb https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
-curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
-echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg ] http://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
 
-#Install Miscellaneous Software
-sudo apt-get update
-sudo apt-get install -y haveged certbot fail2ban traceroute python3-pip iperf3 lynx miniupnpc dnsutils cron
-sudo apt-get install -y python3-pip python3-dev python3-docker gcc lm-sensors wireless-tools
-sudo apt-get install -y python3 python3-psutil python3-setuptools
-sudo apt-get install -y glances
-# curl -s https://install.speedtest.net/app/cli/install.deb.sh | sudo bash
-# sudo apt-get install -y speedtest
+# Install miscellaneous software
+sudo apt update
+# sudo apt install -y haveged 
+sudo apt install -y certbot fail2ban glances traceroute lynx dnsutils cron
+sudo apt install -y lm-sensors wireless-tools miniupnpc natpmpc
+curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
+sudo apt install -y speedtest
 # sudo pip3 install --upgrade setuptools
 # sudo pip3 install --upgrade pip
 # sudo pip3 install --upgrade glances
 
-#Install UniFi Network Application and Default JRE
-# sudo apt-mark hold openjdk-9-*
-# sudo apt-mark hold openjdk-10-*
-# sudo apt-mark hold openjdk-11-*
-# sudo apt-mark hold openjdk-12-*
-# sudo apt-mark hold openjdk-13-*
-# sudo apt-mark hold openjdk-14-*
-# sudo apt-mark hold openjdk-15-*
-# sudo apt-mark hold openjdk-16-*
-# sudo apt-mark hold openjdk-17-*
-# sudo apt-mark hold openjdk-18-*
-# sudo apt-mark hold openjdk-19-*
-sudo apt-get -y install unifi
-# sudo apt-get -y install default-jre-headless
-# sudo service unifi restart
-# sleep 10
+# Install UniFi Network Application and necessary software
+# sudo apt install -y openjdk-21-jre-headless
+sudo apt install -y temurin-21-jre
+# sudo apt install -y mongodb-org-server=8.0.0
+sudo apt install -y unifi
 
-#SSL Configuration
+# SSL configuration
 echo ''
 echo "***** /usr/lib/unifi/data/system.properties Configurations *****" | sudo tee -a /tmp/unifi_system.properties_configurations.txt
 echo 'unifi.https.sslEnabledProtocols=TLSv1.3,TLSv1.2' | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
 echo 'unifi.https.ciphers=TLS_CHACHA20_POLY1305_SHA256,TLS_AES_256_GCM_SHA384,TLS_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256' | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
 
-#Java Heap Size Configuration
+# Java heap size configuration
 echo 'unifi.xms=256' | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
 if [[ $TOTALUNIFIXMX -gt $MINIMUMUNIFIXMX ]]
     then
@@ -135,7 +125,7 @@ if [[ $TOTALUNIFIXMX -gt $MINIMUMUNIFIXMX ]]
         echo 'unifi.xmx='$MINIMUMUNIFIXMX | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
 fi
 
-#MongoDB Default Cache Size Configuration
+# MongoDB default cache size configuration
 # echo 'db.mongo.wt.cache_size_default=true' | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
 if [[ $TOTALMONGODBCACHE -gt $MINIMUMMONGODBCACHE ]]
     then
@@ -144,27 +134,27 @@ if [[ $TOTALMONGODBCACHE -gt $MINIMUMMONGODBCACHE ]]
         echo 'db.mongo.wt.cache_size='$MINIMUMMONGODBCACHE | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
 fi
 
-#Inform Configuration
+# Inform configuration
 echo 'inform.num_thread=200' | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
 echo 'inform.max_keep_alive_requests=100' | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
 
-#Enable High Performance Java Garbage Collector
+# Enable high performance Java garbage collector
 echo 'unifi.G1GC.enabled=true' | sudo tee -a /usr/lib/unifi/data/system.properties /tmp/unifi_system.properties_configurations.txt
 echo ''
 
-#Restart UniFi Network Application to Apply Configurations
+# Restart UniFi Network Application to apply configurations
 sudo service unifi restart
 
-#Redirect UniFi Network Application Ports
+# Redirect UniFi Network Application ports
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
 sudo iptables -t nat -I PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8080
 
-#Install iptables-persistent
+# Install iptables-persistent
 echo 'iptables-persistent iptables-persistent/autosave_v4 boolean true' | sudo debconf-set-selections
 echo 'iptables-persistent iptables-persistent/autosave_v6 boolean true' | sudo debconf-set-selections
-sudo apt-get -y install iptables-persistent
+sudo apt -y install iptables-persistent
 
-#MiniUPNP Settings
+# MiniUPNP settings
 echo 'upnpc -r 80 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
 echo 'upnpc -r 443 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
 echo 'upnpc -r 6789 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
@@ -175,7 +165,7 @@ echo 'upnpc -r 8843 tcp' | sudo tee -a /usr/local/bin/miniupnp.sh
 echo 'upnpc -r 3478 udp' | sudo tee -a /usr/local/bin/miniupnp.sh
 # bash /usr/local/bin/miniupnp.sh
 
-#NATPMP Settings
+# NATPMP settings
 echo "natpmpc -a 80 80 tcp" | sudo tee -a /usr/local/bin/natpmp.sh
 echo "natpmpc -a 443 443 tcp" | sudo tee -a /usr/local/bin/natpmp.sh
 echo "natpmpc -a 6789 6789 tcp" | sudo tee -a /usr/local/bin/natpmp.sh
