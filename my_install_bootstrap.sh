@@ -86,28 +86,19 @@ sudo wget https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroll
 sudo curl https://raw.githubusercontent.com/jacktooandroid/ubiquitiunificontroller/personal/unifi_LE_ssl.sh -o /usr/local/sbin/unifi_LE_ssl.sh
 
 # Add sources
-wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | sudo apt-key add -
-echo "deb https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | sudo tee /etc/apt/sources.list.d/adoptium.list
 curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-8.0.gpg --dearmor
 echo "deb [signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 echo 'deb [arch=amd64,arm64] https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
 
 # Install miscellaneous software
-sudo apt update
-# sudo apt install -y haveged 
 sudo apt install -y certbot fail2ban glances traceroute lynx dnsutils cron
 sudo apt install -y lm-sensors miniupnpc natpmpc
 curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
 sudo apt install -y speedtest
-# sudo pip3 install --upgrade setuptools
-# sudo pip3 install --upgrade pip
-# sudo pip3 install --upgrade glances
 
 # Install UniFi Network Application and necessary software
-# sudo apt install -y openjdk-21-jre-headless
-sudo apt install -y temurin-21-jre
-# sudo apt install -y mongodb-org-server=8.0.0
+sudo apt update
 sudo apt install -y unifi
 
 # SSL configuration
