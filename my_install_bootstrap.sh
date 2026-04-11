@@ -73,6 +73,12 @@ fi
 # Install prerequisites
 sudo apt update && sudo apt -y install ca-certificates apt-transport-https gnupg dirmngr curl wget
 
+# Install miscellaneous software
+sudo apt install -y certbot fail2ban glances traceroute lynx dnsutils cron
+sudo apt install -y lm-sensors miniupnpc natpmpc
+curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
+sudo apt install -y speedtest
+
 # Download Cloudflare scripts
 sudo wget https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-una.sh -O /usr/local/bin/cloudflare_ddns-una.sh
 sudo curl https://raw.githubusercontent.com/jacktooandroid/cloudflare/master/cloudflare_ddns-una.sh -o /usr/local/bin/cloudflare_ddns-una.sh
@@ -90,12 +96,6 @@ curl -fsSL https://www.mongodb.org/static/pgp/server-8.0.asc | sudo gpg -o /usr/
 echo "deb [signed-by=/usr/share/keyrings/mongodb-server-8.0.gpg] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/8.0 main" | sudo tee /etc/apt/sources.list.d/mongodb-org-8.0.list
 sudo wget -O /etc/apt/trusted.gpg.d/unifi-repo.gpg https://dl.ui.com/unifi/unifi-repo.gpg
 echo 'deb [arch=amd64,arm64] https://www.ui.com/downloads/unifi/debian stable ubiquiti' | sudo tee /etc/apt/sources.list.d/ubnt-unifi.list
-
-# Install miscellaneous software
-sudo apt install -y certbot fail2ban glances traceroute lynx dnsutils cron
-sudo apt install -y lm-sensors miniupnpc natpmpc
-curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
-sudo apt install -y speedtest
 
 # Install UniFi Network Application and necessary software
 sudo apt update
