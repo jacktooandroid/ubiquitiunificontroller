@@ -74,7 +74,7 @@ fi
 sudo apt update && sudo apt -y install ca-certificates apt-transport-https gnupg dirmngr curl wget
 
 # Install miscellaneous software
-sudo apt install -y certbot fail2ban glances traceroute lynx dnsutils cron
+sudo apt install -y certbot fail2ban nftables glances traceroute lynx dnsutils cron
 sudo apt install -y lm-sensors miniupnpc natpmpc
 curl -s https://packagecloud.io/install/repositories/ookla/speedtest-cli/script.deb.sh | sudo bash
 sudo apt install -y speedtest
