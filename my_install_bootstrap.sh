@@ -64,7 +64,7 @@ if [[ $TOTALSWAPTOADDGB -gt 0 ]]
         sudo chmod 600 /swapfile
         sudo mkswap /swapfile
         sudo swapon /swapfile
-        sudo cp /etc/fstab /etc/fstab.bak
+        sudo cp /etc/fstab /etc/fstab.bak.$(date +%Y%m%d%H%M%S)
         echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
     else
         echo 'Additional swap memory not added as at least '$TOTALMEMSWAPREQUIREDGB'GB of memory + swap (rounded) has been installed on this server'
