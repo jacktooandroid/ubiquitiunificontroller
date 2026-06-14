@@ -135,7 +135,7 @@ echo 'unifi.G1GC.enabled=true' | sudo tee -a /usr/lib/unifi/data/system.properti
 echo ''
 
 # Restart UniFi Network Application to apply configurations
-sudo service unifi restart
+sudo systemctl restart unifi
 
 # Redirect UniFi Network Application ports
 sudo iptables -t nat -I PREROUTING -p tcp --dport 443 -j REDIRECT --to-ports 8443
